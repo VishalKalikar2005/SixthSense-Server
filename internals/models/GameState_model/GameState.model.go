@@ -10,4 +10,6 @@ const (
     AnswerYes      = "yes"
     AnswerNo       = "no"
     AnswerDontKnow = "dont_know"
+    AnswerProbably = "probably"
+    AnswerProbablyNot = "probably_not"
 )
