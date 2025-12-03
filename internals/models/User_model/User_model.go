@@ -5,6 +5,7 @@ type User struct {
 	UserID   string `json:"userid" bson:"userid" validate:"required,min=3,max=30"`
 	Email    string `json:"email" bson:"email" validate:"required,email"`
 	Password string `json:"password" bson:"password" validate:"required,min=8"`
+	Token    string `json:"token" bson:"token"`
 }
 type UserLogin struct {
 	Email    string `json:"email" bson:"email" validate:"required,email"`
@@ -14,4 +15,5 @@ type UserLogin struct {
 type UserRepo interface {
 	RegisterUser(User User) (int64, error)
 	LoginUser(Email, password string) (string, error)
+	LogoutUser(userID, token string) error
 }

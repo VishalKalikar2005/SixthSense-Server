@@ -31,3 +31,44 @@ func (h *UserHandler) UserRegisterHandler(c echo.Context) error {
 	})
 
 }
+func (h *UserHandler) UserLoginHandler(c echo.Context) error {
+	var req models.UserLogin
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(400, "Invalid request")
+	}
+	token, err := h.UserServices.LoginUser(req.Email, req.Password)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Status: "error",
+			Error:  "Failed to login user: " + err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, models.SuccessResponse{
+		Status:  "sucess",
+		Message: "User LoggedIn Sucessfully",
+		Data:    map[string]string{"token": token},
+	})
+}
+func (h *UserHandler) LogoutUserHandler(c echo.Context) error {
+	var Userlogout struct {
+		UserID string `jsomn:"userid"`
+	}
+	err := c.Bind(&Userlogout)
+	if err != nil {
+		return c.JSON(400, models.ErrorResponse{
+			Status: "error",
+			Error:  "Failed to logout user: " + err.Error(),
+		})
+	}
+	err= h.UserServices.LogoutUser(Userlogout.UserID,"")
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Status: "error",
+			Error:  "Failed to logout user: " + err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, models.SuccessResponse{
+		Status:  "success",
+		Message: "User logged out successfully",
+	})
+}

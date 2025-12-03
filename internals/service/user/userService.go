@@ -30,3 +30,20 @@ func (s *UserService) RegisterUser(req models.User) (int64, error) {
 	}
 	return id, nil
 }
+func (s *UserService) LoginUser(Email, password string) (string, error) {
+	token, err := s.userRepo.LoginUser(Email, password)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+}
+func (s *UserService) LogoutUser(UserID, token string) error {
+	if UserID == "" {
+		return fmt.Errorf("invalid user id")
+	}
+	err := s.userRepo.LogoutUser(UserID, "")
+	if err != nil {
+		return err
+	}
+	return nil
+}
